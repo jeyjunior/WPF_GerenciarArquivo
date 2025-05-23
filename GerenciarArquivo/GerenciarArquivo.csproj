@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GerenciarArquivo.Application\GerenciarArquivo.Application.csproj" />
+    <ProjectReference Include="..\GerenciarArquivo.Domain\GerenciarArquivo.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="JJ.NET.Core">
+      <HintPath>..\GerenciarArquivo.Domain\DLL\JJ.NET.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

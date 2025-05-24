@@ -14,25 +14,23 @@ namespace GerenciarArquivo.Application
     {
         public static System.IServiceProvider ServiceProvider { get; private set; }
 
-        public static async Task IniciarAsync()
+        public static async Task<string> IniciarAsync()
         {
             var config = new ConfiguracaoBancoDadosService();
             var result = await config.IniciarConfiguracaoAsync(JJ.NET.CrossData.Enumerador.Conexao.SQLite);
 
             if (!result.Sucesso)
-                throw new Exception(result.Erros.First());
+                return "";
             
             var services = new ServiceCollection();
 
             // Registro das dependências
             services.AddSingleton<IUnitOfWork>(_ => new UnitOfWork(result.DbConnection));
 
-            //services.AddSingleton<IArquivoRepository, ArquivoRepository>();
-            //services.AddSingleton<IParametroRepository, ParametroRepository>();
-            //services.AddSingleton<IArquivoAppService, ArquivoAppService>();
-            //services.AddSingleton<IParametroAppService, ParametroAppService>();
 
             ServiceProvider = services.BuildServiceProvider();
+
+            return result.CaminhoArquivoConfiguracao;
         }
     }
 }

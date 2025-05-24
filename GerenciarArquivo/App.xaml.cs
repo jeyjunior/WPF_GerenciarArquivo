@@ -11,13 +11,15 @@ namespace GerenciarArquivo
     /// </summary>
     public partial class App : System.Windows.Application
     {
+        public static string ArquivoConfiguracaoCaminho;
+
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             try
             {
-                await Bootstrap.IniciarAsync();
+                ArquivoConfiguracaoCaminho = await Bootstrap.IniciarAsync();
 
                 var mainWindow = new MainWindow();
                 mainWindow.Show();

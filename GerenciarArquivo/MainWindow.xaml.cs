@@ -16,9 +16,22 @@ namespace GerenciarArquivo
     /// </summary>
     public partial class MainWindow : Window
     {
+        public List<string> Items { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            // Criando dados de teste
+            Items = new List<string>
+            {
+                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                "Quarto e último item de teste"
+            };
+
+            DataContext = this; // Define o DataContext para a própria janela
         }
     }
 }

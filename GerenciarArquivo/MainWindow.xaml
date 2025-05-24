@@ -4,12 +4,148 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GerenciarArquivo"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Style="{StaticResource MaterialDesignWindow}"
-        Title="MainWindow" Height="600" Width="500">
-    
-    <Grid>
+        Background="Gray"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="500" Width="450" MinWidth="350" MinHeight="400">
 
+    <Grid x:Name="RootGrid" Margin="18" >
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="48"/>
+            <RowDefinition  Height="*"/>
+            <RowDefinition  Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ORIGEM -->
+        <Grid Grid.Row="0" Margin="0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnSelecionarPastaOrigem" Grid.Column="0" Content="Selecionar Pasta" HorizontalAlignment="Stretch"/>
+            <Button x:Name="btnAddArquivo" Grid.Column="2" Content="Selecionar Arquivos" HorizontalAlignment="Stretch"/>
+        </Grid>
+        
+        <ListView Grid.Row="1" 
+                  ItemsSource="{Binding Items}" 
+                  Background="Bisque"
+                  SelectionMode="Single"
+                  BorderThickness="1"
+                  Margin="0"
+                  BorderBrush="Red"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+            <!-- Estilo para os itens -->
+            <ListView.ItemContainerStyle>
+                
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0,0,0,1"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#DDD"
+                                BorderThickness="0,0,0,1"
+                                Padding="8">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <!-- Hover effect -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#F5F5F5"/>
+                                    </Trigger>
+
+                                    <!-- Selected item style -->
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#E3F2FD"/>
+                                        <Setter TargetName="Bd" Property="BorderBrush" Value="#90CAF9"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                
+            </ListView.ItemContainerStyle>
+
+            <!-- Template do conteúdo -->
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    
+                    <Grid Background="Red" Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Margin="0"
+                                   Padding="0"
+                                   Text="Teste Teste Teste Teste" 
+                                   TextTrimming="CharacterEllipsis"
+                                   VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+                            <Button Width="32" Content="📋" Tag="{Binding}"/>
+                            <Button Width="32" Content="🗑️" Tag="{Binding}"  Margin="4,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                    
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Grid.Row="2" Margin="0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="32"/>
+                <ColumnDefinition Width="32"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Margin="0" Padding="0" Text="Teste Teste Teste Teste" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+            <Button Grid.Column="1" Content="Selecionar Pasta" HorizontalAlignment="Stretch"/>
+            <Button Grid.Column="2" Content="Selecionar Arquivos" HorizontalAlignment="Stretch"/>
+        </Grid>
+
+        <!-- DESTINO -->
+        <StackPanel Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+            Background="#FFF5F5F5" Margin="0,12,0,0">
+
+            <!-- CheckBox Nome Padrão -->
+            <CheckBox Content="Nome Padrão:" Margin="0,0,0,8"/>
+
+            <!-- TextBox para o nome padrão -->
+            <TextBox Text="" Margin="0,0,0,12"/>
+
+            <!-- ComboBox de Destinos -->
+            <StackPanel Orientation="Vertical" Margin="0,0,0,8">
+                <TextBlock Text="Destino dos arquivos:" 
+                   Margin="0,0,0,4"
+                   FontWeight="SemiBold"/>
+
+                <ComboBox x:Name="cbDestinos"
+                  ItemsSource="{Binding CaminhosDestino}"
+                  SelectedItem="{Binding CaminhoDestinoSelecionado}"
+                  DisplayMemberPath="Caminho"
+                  IsEditable="True"
+                  Margin="0,0,0,8"/>
+
+
+                <!-- Botões de gerenciamento -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Remover" Width="100"/>
+                    <Button Content="Adicionar" Width="100" Margin="0,0,8,0"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
     </Grid>
-    
 </Window>

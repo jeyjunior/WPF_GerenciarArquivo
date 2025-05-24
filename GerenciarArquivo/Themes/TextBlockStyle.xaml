@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Branco}"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+
+    <Style x:Key="TextBlockDefault" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+    </Style>
+
+    <Style x:Key="TextBlockDefault_12" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <Style x:Key="TextBlockDefault_14" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style x:Key="TextBlockDefault_18" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style x:Key="TextBlockToIcon" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+    </Style>
+
+    <Style x:Key="TextBlockToIcon_OutlinedButton" TargetType="TextBlock" BasedOn="{StaticResource TextBlockToIcon}">
+        <Setter Property="Foreground" Value="{StaticResource AzulFluent_2}"/>
+        <Style.Triggers>
+            <!-- Hover effect -->
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource Branco}"/>
+            </DataTrigger>
+
+            <!-- Pressed effect -->
+            <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource Branco}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

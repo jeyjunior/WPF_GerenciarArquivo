@@ -1,0 +1,157 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:GerenciarArquivo.Themes">
+
+    <!-- Base Button Style (common properties for all buttons) -->
+    <Style x:Key="BaseFlatButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource Branco}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="12 6"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="5">
+                        <ContentPresenter x:Name="contentPresenter"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        RecognizesAccessKey="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover effect -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AzulFluent_3}"/>
+                        </Trigger>
+
+                        <!-- Pressed effect -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AzulFluent_1}"/>
+                        </Trigger>
+
+                        <!-- Disabled state -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 1. Flat Button Padrão (com background azul) -->
+    <Style x:Key="FlatButton" TargetType="Button" BasedOn="{StaticResource BaseFlatButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource AzulFluent_2}"/>
+    </Style>
+
+    <!-- 2. Flat Button Sem Fundo -->
+    <Style x:Key="FlatButtonNoBackground" TargetType="Button" BasedOn="{StaticResource BaseFlatButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource Nenhuma}"/>
+        <Setter Property="Foreground" Value="{StaticResource Branco}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="5">
+                        <ContentPresenter x:Name="contentPresenter"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        RecognizesAccessKey="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AzulFluent_3}"/>
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource Branco}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AzulFluent_1}"/>
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource Branco}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 3. Flat Button Sem Fundo com Borda -->
+    <Style x:Key="FlatButtonOutlined" TargetType="Button" BasedOn="{StaticResource BaseFlatButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource Nenhuma}"/>
+            <Setter Property="Foreground" Value="{StaticResource AzulFluent_2}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AzulFluent_2}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                            <ContentPresenter x:Name="contentPresenter"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AzulFluent_3}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AzulFluent_3}"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource Branco}"/>
+                            </Trigger>
+
+                            <!-- Pressed effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AzulFluent_1}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AzulFluent_1}"/>
+                                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource Branco}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+     <!-- 4. Flat Button Com Fundo e com Sombra -->
+    <Style x:Key="FlatButtonWithShadow" TargetType="Button" BasedOn="{StaticResource FlatButton}">
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="10" 
+                            ShadowDepth="5" 
+                            Opacity="0.4" 
+                                  Direction="270"
+                            Color="{Binding Source={StaticResource Preto}, Path=Color}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 5. Flat Button Padrão para Ícones (com background azul) -->
+    <Style x:Key="FlatButtonToIcon" TargetType="Button" BasedOn="{StaticResource FlatButton}">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+    
+    <!-- 6. Flat Button Padrão para Ícones (sem background azul) -->
+    <Style x:Key="FlatButtonNoBackgroundToIcon" TargetType="Button" BasedOn="{StaticResource FlatButtonNoBackground}">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+
+    <!-- 7. Flat Button Padrão (com background cinza) -->
+    <Style x:Key="FlatButtonDefault" TargetType="Button" BasedOn="{StaticResource BaseFlatButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource Cinza8}"/>
+    </Style>
+
+    <!-- 6. Flat Button Padrão para Ícones (sem background azul) -->
+    <Style x:Key="FlatButtonDefaultToIcon" TargetType="Button" BasedOn="{StaticResource FlatButtonDefault}">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+ 
+
+</ResourceDictionary>

@@ -17,6 +17,7 @@ namespace GerenciarArquivo
     public partial class MainWindow : Window
     {
         public List<string> Items { get; set; }
+        public List<string> CaminhosDestino { get; set; }
 
         public MainWindow()
         {
@@ -26,6 +27,44 @@ namespace GerenciarArquivo
             Items = new List<string>
             {
                 "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                "Quarto e último item de teste"
+            };
+
+            CaminhosDestino = new List<string>
+            {
+                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
+                "Segundo item com texto mais longo",
+                "Terceiro item",
+                                "Primeiro item da lista",
                 "Segundo item com texto mais longo",
                 "Terceiro item",
                 "Quarto e último item de teste"

@@ -1,0 +1,91 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Estilo Base para CheckBox -->
+    <Style x:Key="BaseCheckBoxStyle" TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource Branco}"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Caixa de seleção customizada (sem Path interno) -->
+                        <Border x:Name="checkBoxBorder"
+                                Grid.Column="0"
+                                Width="18"
+                                Height="18"
+                                Margin="0,0,8,0"
+                                Background="{StaticResource Branco}"
+                                BorderBrush="{StaticResource AzulFluent_2}"
+                                BorderThickness="1"
+                                CornerRadius="3"/>
+
+                        <!-- ContentPresenter para o texto -->
+                        <ContentPresenter x:Name="contentPresenter"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        RecognizesAccessKey="True"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Quando marcado - apenas muda o fundo para azul -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="checkBoxBorder" Property="Background" Value="{StaticResource AzulFluent_2}"/>
+                        </Trigger>
+
+                        <!-- Efeito hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{StaticResource AzulFluent_3}"/>
+                        </Trigger>
+
+                        <!-- Quando desabilitado -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="checkBoxBorder" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Estilo padrão (baseado no TextBlockDefault) -->
+    <Style x:Key="DefaultCheckBox" TargetType="CheckBox" BasedOn="{StaticResource BaseCheckBoxStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Style="{StaticResource TextBlockDefault}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Variação com texto menor (14px) -->
+    <Style x:Key="CheckBox14" TargetType="CheckBox" BasedOn="{StaticResource BaseCheckBoxStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Style="{StaticResource TextBlockDefault_14}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Variação com texto menor (12px) -->
+    <Style x:Key="CheckBox12" TargetType="CheckBox" BasedOn="{StaticResource BaseCheckBoxStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Style="{StaticResource TextBlockDefault_12}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

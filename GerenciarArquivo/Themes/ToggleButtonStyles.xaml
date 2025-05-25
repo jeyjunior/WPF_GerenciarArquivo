@@ -1,0 +1,34 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Em um arquivo separado (ex: ToggleButtonStyles.xaml) -->
+    <Style x:Key="ComboBoxToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="templateRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Path x:Name="arrow"
+                              Margin="0,0,15,0"
+                          Fill="{StaticResource Branco}"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center"
+                          Data="M0,0 L4,4 8,0 Z"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <!-- Seus estilos de MouseOver aqui -->
+                            <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource Cinza9Transp70}"/>
+                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource Cinza9Transp70}"/>
+                            <Setter TargetName="arrow" Property="Fill" Value="{StaticResource Branco}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

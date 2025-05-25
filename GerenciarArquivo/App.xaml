@@ -9,6 +9,10 @@
                 <ResourceDictionary Source="Themes/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="Themes/TextBlockStyle.xaml"/>
                 <ResourceDictionary Source="Themes/ListViewStyles.xaml"/>
+                <ResourceDictionary Source="Themes/CheckBoxStyles.xaml"/>
+                <ResourceDictionary Source="Themes/TextBoxStyles.xaml"/>
+                <ResourceDictionary Source="Themes/ToggleButtonStyles.xaml"/>
+                <ResourceDictionary Source="Themes/ComboBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

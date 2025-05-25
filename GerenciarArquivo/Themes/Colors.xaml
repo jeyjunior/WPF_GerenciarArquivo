@@ -56,6 +56,8 @@
     <SolidColorBrush x:Key="Cinza9Transp30" Color="#B3323232"/>
     <SolidColorBrush x:Key="Cinza9Transp40" Color="#99323232"/>
     <SolidColorBrush x:Key="Cinza9Transp50" Color="#80323232"/>
+    <SolidColorBrush x:Key="Cinza9Transp70" Color="#30323232"/>
+    <SolidColorBrush x:Key="Cinza9Transp90" Color="#10323232"/>
 
     <!-- Cinza10 -->
     <SolidColorBrush x:Key="Cinza10Transp10" Color="#E6232323"/>
@@ -63,6 +65,7 @@
     <SolidColorBrush x:Key="Cinza10Transp30" Color="#B3232323"/>
     <SolidColorBrush x:Key="Cinza10Transp40" Color="#99232323"/>
     <SolidColorBrush x:Key="Cinza10Transp50" Color="#80232323"/>
+    <SolidColorBrush x:Key="Cinza10Transp90" Color="#10232323"/>
 
     <!-- Cinza11 -->
     <SolidColorBrush x:Key="Cinza11Transp10" Color="#E6191919"/>
@@ -70,6 +73,7 @@
     <SolidColorBrush x:Key="Cinza11Transp30" Color="#B3191919"/>
     <SolidColorBrush x:Key="Cinza11Transp40" Color="#99191919"/>
     <SolidColorBrush x:Key="Cinza11Transp50" Color="#80191919"/>
+    <SolidColorBrush x:Key="Cinza11Transp90" Color="#10191919"/>
 
     <!-- Cinza12 -->
     <SolidColorBrush x:Key="Cinza12Transp10" Color="#E6161616"/>

@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Background="{DynamicResource Cinza10}"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="500" Width="450" MinWidth="350" MinHeight="400">
+        Title="MainWindow" Height="500" Width="550" MinWidth="550" MinHeight="400">
 
     <Grid x:Name="RootGrid" Margin="18" >
         <Grid.RowDefinitions>
@@ -28,21 +28,24 @@
             
             <Button x:Name="btnSelecionarPastaOrigem" 
                     Grid.Column="0" 
+                    Click="btnSelecionarPastaOrigem_Click"
                     Content="Selecionar Pasta" 
                     Style="{StaticResource FlatButton}"/>
             
-            <Button x:Name="btnAddArquivo" 
+            <Button x:Name="btnSelecionarArquivos" 
                     Grid.Column="2" 
+                    Click="btnSelecionarArquivos_Click"
                     Content="Selecionar Arquivos" 
                     Style="{StaticResource FlatButton}"/>
         </Grid>
 
+        <!-- LISTA DE ARQUIVOS -->
         <Border Grid.Row="1" Padding="0" Background="{StaticResource Cinza9}" CornerRadius="8,8,0,0" BorderThickness="0">
-            
             <ListView Grid.Row="1" 
+                      x:Name="lvwPrincipal"
                       Margin="0"
                       Padding="0"
-                      ItemsSource="{Binding Items}" 
+                      ItemsSource="{Binding Arquivos}" 
                       Style="{StaticResource DefaultListViewStyle}">
 
                 <ListView.ItemTemplate>
@@ -51,23 +54,23 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" 
-                                       Text="Teste Teste Teste Teste"
+                                       x:Name="txtArquivo"
+                                       Text="{Binding Nome}"
                                        Style="{StaticResource TextBlockDefault_14}"/>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
-                                <Button Grid.Column="1" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
+                                <Button x:Name="btnExcluirArquivo" Click="btnExcluirArquivo_Click" Tag="{Binding CaminhoCompleto}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
                                     <TextBlock Style="{StaticResource TextBlockToIcon}" FontSize="12" Text="&#xE894;"/>
                                 </Button>
 
-                                <Button Grid.Column="1" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
+                                <Button x:Name="btnAbrirPastaArquivo" Click="btnAbrirPastaArquivo_Click" Tag="{Binding CaminhoCompleto}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
                                     <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xED25;"/>
                                 </Button>
-                                
-                                <Button Grid.Column="1" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
+
+                                <Button x:Name="btnCopiarArquivo" Click="btnCopiarArquivo_Click" Tag="{Binding CaminhoCompleto}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
                                     <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE8C8;"/>
                                 </Button>
                             </StackPanel>
@@ -78,58 +81,69 @@
             </ListView>
         </Border>
 
+        <!-- STATUS LISTA DE ARQUIVOS -->
         <Border Grid.Row="2" Padding="12,0" Margin="0,0,0,12" Background="{StaticResource Cinza11}" CornerRadius="0,0,8,8" BorderThickness="0">
             <Grid Grid.Row="2" Margin="0,8" Height="32">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="32"/>
-                    <ColumnDefinition Width="8"/>
-                    <ColumnDefinition Width="32"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Text="123" Style="{StaticResource TextBlockDefault_12}"/>
-            
-                <Button Grid.Column="1" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                    <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE74D;"/>
-                </Button>
-                <Button Grid.Column="3" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                    <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE8C8;"/>
-                </Button>
+                <TextBlock x:Name="txtQtdArquivos" Grid.Column="0" Text="{Binding QuantidadeArquivos}" Style="{StaticResource TextBlockDefault_12}"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+                    <Button x:Name="btnDeletarTodosArquivos" Click="btnDeletarTodosArquivos_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
+                        <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE74D;"/>
+                    </Button>
+                    <Button x:Name="btnCopiarTodosArquivos" Click="btnCopiarTodosArquivos_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
+                        <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE8C8;"/>
+                    </Button>
+                </StackPanel>
             </Grid>
         </Border>
 
+        <!-- DESTINO -->
         <Border Grid.Row="3" Padding="12,0" Background="{StaticResource Cinza9}" CornerRadius="8" BorderThickness="0">
-            <!-- DESTINO -->
             <StackPanel Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                  Margin="0,12,0,0">
 
-                <!-- CheckBox Nome Padrão -->
-                <CheckBox Content="Nome Padrão:" Style="{StaticResource CheckBox14}" Margin="0,0,0,2"/>
+                <CheckBox x:Name="chkNomePadrao" Content="Nome Padrão:" IsChecked="{Binding NomePadraoAtivo, Mode=TwoWay}" Style="{StaticResource CheckBox14}" Margin="0,0,0,8"/>
+                <TextBox x:Name="txtNomePadrao" Text="{Binding NomePadrao, Mode=TwoWay}" IsEnabled="{Binding NomePadraoAtivo}" Style="{StaticResource TextBox12}"/>
 
-                <!-- TextBox para o nome padrão -->
-                <TextBox Text="ASD ASD ASD  ASDASD ASD" Style="{StaticResource TextBox12}"/>
-
-                <!-- ComboBox de Destinos -->
                 <StackPanel Orientation="Vertical" Margin="0,12,0,8">
-                    <TextBlock Text="Destino dos arquivos:" Style="{StaticResource TextBlockDefault_14}" Margin="0,0,0,2"/>
+                    <Border Height="1" HorizontalAlignment="Stretch" Background="{StaticResource Cinza2}" Margin="0,0,0,8"/>
+                    <TextBlock Grid.Column="0" Text="Destino dos arquivos:" Style="{StaticResource TextBlockDefault_14}" Margin="0,0,0,8" Foreground="{StaticResource Cinza1}"/>
 
-                    <ComboBox Style="{StaticResource SimpleComboBoxStyle}"
-                              ItemsSource="{Binding CaminhosDestino}"
-                              MaxDropDownHeight="200"
-                              SelectedItem="{Binding CaminhoDestinoSelecionado}"
-                              Margin="0,0,0,8"/>
-                    <!-- Botões de gerenciamento -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                            <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE75C;"/>
-                        </Button>
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                        <Border Width="8"/>
+                        <ComboBox Style="{StaticResource SimpleComboBoxStyle}"
+                                  x:Name="cboCaminhoDestino"
+                                  ItemsSource="{Binding CaminhosDestino}"
+                                  VerticalAlignment="Center"
+                                  MaxDropDownHeight="200"
+                                  Height="34"
+                                  SelectedItem="{Binding CaminhoDestinoSelecionado, Mode=TwoWay}"
+                                  Margin="0,0,8,8"/>
 
-                        <Button Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                            <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE710;"/>
-                        </Button>
-                    </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+                            <Button x:Name="btnDeletarCaminhoDestino" Click="btnDeletarCaminhoDestino_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34" >
+                                <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE75C;" />
+                            </Button>
+                            <Button x:Name="btnAbrirPastaCaminhoDestino" Click="btnAbrirPastaCaminhoDestino_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34">
+                                <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xED25;"/>
+                            </Button>
+                            <Button x:Name="btnAdicionarCaminhoDestino" Click="btnAdicionarCaminhoDestino_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34">
+                                <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE710;"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Text="{Binding CaminhoDestinoCompletoSelecionado, Mode=TwoWay}" Style="{StaticResource TextBlockDefault_14}" Margin="0,0,0,2" />
+                
                 </StackPanel>
             </StackPanel>
         </Border>

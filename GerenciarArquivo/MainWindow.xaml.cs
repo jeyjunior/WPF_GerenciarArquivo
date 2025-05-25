@@ -11,66 +11,73 @@ using System.Windows.Shapes;
 
 namespace GerenciarArquivo
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        public List<string> Items { get; set; }
-        public List<string> CaminhosDestino { get; set; }
+        #region Interfaces
+        #endregion
 
+        #region Propriedades
+        #endregion
+
+        #region Construtor
         public MainWindow()
         {
             InitializeComponent();
-
-            // Criando dados de teste
-            Items = new List<string>
-            {
-                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                "Quarto e último item de teste"
-            };
-
-            CaminhosDestino = new List<string>
-            {
-                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                                "Primeiro item da lista",
-                "Segundo item com texto mais longo",
-                "Terceiro item",
-                "Quarto e último item de teste"
-            };
-
-            DataContext = this; // Define o DataContext para a própria janela
         }
+        #endregion
+
+        #region Eventos
+        private void btnSelecionarPastaOrigem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void btnSelecionarArquivos_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAbrirPastaArquivo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnExcluirArquivo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnCopiarArquivo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDeletarTodosArquivos_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnCopiarTodosArquivos_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDeletarCaminhoDestino_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAbrirPastaCaminhoDestino_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAdicionarCaminhoDestino_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region Metodos
+        #endregion
     }
 }

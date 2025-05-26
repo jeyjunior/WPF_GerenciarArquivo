@@ -18,6 +18,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\GerenciarArquivo.Domain\GerenciarArquivo.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Reference Include="JJ.NET.Core">
 	    <HintPath>..\GerenciarArquivo.Domain\DLL\JJ.NET.Core.dll</HintPath>
 	  </Reference>

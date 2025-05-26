@@ -1,4 +1,9 @@
-﻿using JJ.NET.CrossData.Services;
+﻿using GerenciarArquivo.Application.Interface;
+using GerenciarArquivo.Application.Services;
+using GerenciarArquivo.Domain.Entidades;
+using GerenciarArquivo.Domain.Interfaces;
+using GerenciarArquivo.InfraData.Repository;
+using JJ.NET.CrossData.Services;
 using JJ.NET.Data;
 using JJ.NET.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,21 +21,27 @@ namespace GerenciarArquivo.Application
 
         public static async Task<string> IniciarAsync()
         {
-            var config = new ConfiguracaoBancoDadosService();
-            var result = await config.IniciarConfiguracaoAsync(JJ.NET.CrossData.Enumerador.Conexao.SQLite);
+            await Configuracao.IniciarAsync();
 
-            if (!result.Sucesso)
+            if (Configuracao.ConexaoBaseDados == null)
                 return "";
             
             var services = new ServiceCollection();
 
             // Registro das dependências
-            services.AddSingleton<IUnitOfWork>(_ => new UnitOfWork(result.DbConnection));
+            services.AddSingleton<IUnitOfWork>(_ => new UnitOfWork(Configuracao.ConexaoBaseDados));
 
+            services.AddSingleton<IArquivoRepository, ArquivoRepository>();
+            services.AddSingleton<IDestinoRepository, DestinoRepository>();
+            services.AddSingleton<IParametroRepository, ParametroRepository>();
+
+            services.AddSingleton<IArquivoAppService, ArquivoAppService>();
+            services.AddSingleton<IDestinoAppService, DestinoAppService>();
+            services.AddSingleton<IParametroAppService, ParametroAppService>();
 
             ServiceProvider = services.BuildServiceProvider();
 
-            return result.CaminhoArquivoConfiguracao;
+            return Configuracao.CaminhoArquivoConfig;
         }
     }
 }

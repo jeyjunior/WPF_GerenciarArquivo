@@ -18,6 +18,8 @@ namespace GerenciarArquivo.Domain.Entidades
         public string Nome { get; set; }
         [Obrigatorio]
         public string CaminhoCompleto { get; set; }
+        [Obrigatorio]
+        public bool Selecionado { get; set; }
 
         [Editavel(false)]
         public ValidarResultado ValidarResultado { get; set; } = new ValidarResultado();

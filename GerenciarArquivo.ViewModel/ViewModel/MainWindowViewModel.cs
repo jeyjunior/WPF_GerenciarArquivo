@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace GerenciarArquivo.ViewModel.ViewModel
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
+        public void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -60,6 +61,19 @@ namespace GerenciarArquivo.ViewModel.ViewModel
         public Arquivo ObterArquivo(string caminhoCompleto)
         {
             return _arquivos.FirstOrDefault(i => i.CaminhoCompleto.Equals(caminhoCompleto));
+        }
+
+        public void SelecionarTodosArquivo(bool selecionar)
+        {
+            if (Arquivos == null)
+                return;
+
+            foreach (var arquivo in Arquivos)
+            {
+                arquivo.Selecionado = selecionar;
+            }
+
+            OnPropertyChanged(nameof(Arquivos));
         }
         #endregion
 

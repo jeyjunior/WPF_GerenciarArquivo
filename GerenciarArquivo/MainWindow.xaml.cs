@@ -17,7 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace GerenciarArquivo
 {
@@ -71,33 +71,99 @@ namespace GerenciarArquivo
             {
             }
         }
+
         private void btnSelecionarPastaOrigem_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-               
+                var dialog = new CommonOpenFileDialog
+                {
+                    IsFolderPicker = true,
+                    Title = "Selecione a pasta de origem",
+                    EnsurePathExists = true,
+                    AllowNonFileSystemItems = false
+                };
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    string pastaSelecionada = dialog.FileName;
+
+                    var arquivos = Directory.GetFiles(pastaSelecionada);
+
+                    foreach (var item in arquivos)
+                    {
+                        var file = new FileInfo(item);
+
+                        if (!file.Exists)
+                            continue;
+
+                        ViewModel.AdicionarArquivo(new Arquivo { CaminhoCompleto = file.FullName, Nome = file.Name });
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show($"Acesso negado: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
-                // await Mensagem.ErroAsync($"Erro ao selecionar pasta: {ex.Message}", this.Content.XamlRoot);
+                MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void btnSelecionarArquivos_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                var dialog = new CommonOpenFileDialog
+                {
+                    IsFolderPicker = false, 
+                    Title = "Selecione um ou mais arquivos",
+                    EnsureFileExists = true,
+                    Multiselect = true, 
+                    AllowNonFileSystemItems = false
+                };
 
+                dialog.Filters.Add(new CommonFileDialogFilter("Todos os arquivos", "*.*"));
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    foreach (var caminhoArquivo in dialog.FileNames)
+                    {
+                        var file = new FileInfo(caminhoArquivo);
+
+                        if (!file.Exists)
+                            continue;
+
+                        ViewModel.AdicionarArquivo(new Arquivo
+                        {
+                            CaminhoCompleto = file.FullName,
+                            Nome = file.Name,
+                        });
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show($"Acesso negado: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void chkSelecionarTodos_Changed(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.Arquivos == null) 
+                return;
+
+            bool isChecked = chkSelecionarTodos.IsChecked ?? false;
+
+            ViewModel.SelecionarTodosArquivo(isChecked);
         }
 
         private void btnAbrirPastaArquivo_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnExcluirArquivo_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnCopiarArquivo_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -132,9 +198,6 @@ namespace GerenciarArquivo
         private void AdicionarArquivoNaColecao(Arquivo arquivo)
         {
             if (arquivo == null)
-                return;
-
-            if (ViewModel.ValidarSeArquivoJaExiste(arquivo))
                 return;
 
             ViewModel.AdicionarArquivo(arquivo);
@@ -214,5 +277,7 @@ namespace GerenciarArquivo
             }
         }
         #endregion
+
+
     }
 }

@@ -10,11 +10,12 @@
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        Title="MainWindow" Height="500" Width="550" MinWidth="550" MinHeight="400">
+        Title="MainWindow" Height="600" Width="550" MinWidth="550" MinHeight="600">
 
     <Grid x:Name="RootGrid" Margin="18" >
         <Grid.RowDefinitions>
             <RowDefinition  Height="48"/>
+            <RowDefinition  Height="Auto"/>
             <RowDefinition  Height="*"/>
             <RowDefinition  Height="Auto"/>
             <RowDefinition  Height="Auto"/>
@@ -41,57 +42,14 @@
                     Style="{StaticResource FlatButton}"/>
         </Grid>
 
-        <!-- LISTA DE ARQUIVOS -->
-        <Border Grid.Row="1" Padding="0" Background="{StaticResource Cinza9}" CornerRadius="8,8,0,0" BorderThickness="0">
-            <ListView Grid.Row="1" 
-                      x:Name="lvwPrincipal"
-                      Margin="0"
-                      Padding="0"
-                      ItemsSource="{Binding Arquivos}" 
-                      Style="{StaticResource DefaultListViewStyle}">
-
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0" 
-                                       x:Name="txtArquivo"
-                                       Text="{Binding Nome}"
-                                       Style="{StaticResource TextBlockDefault_14}"/>
-
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
-                                <Button x:Name="btnExcluirArquivo" Click="btnExcluirArquivo_Click" Tag="{Binding CaminhoCompleto}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                                    <TextBlock Style="{StaticResource TextBlockToIcon}" FontSize="12" Text="&#xE894;"/>
-                                </Button>
-
-                                <Button x:Name="btnAbrirPastaArquivo" Click="btnAbrirPastaArquivo_Click" Tag="{Binding CaminhoCompleto}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                                    <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xED25;"/>
-                                </Button>
-
-                                <Button x:Name="btnCopiarArquivo" Click="btnCopiarArquivo_Click" Tag="{Binding CaminhoCompleto}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                                    <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE8C8;"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Border>
-
-        <!-- STATUS LISTA DE ARQUIVOS -->
-        <Border Grid.Row="2" Padding="12,0" Margin="0,0,0,12" Background="{StaticResource Cinza11}" CornerRadius="0,0,8,8" BorderThickness="0">
-            <Grid Grid.Row="2" Margin="0,8" Height="32">
+        <Border Grid.Row="1" Padding="12,0" Margin="0,0,0,0" Height="48" Background="{StaticResource Cinza11}" CornerRadius="8,8,0,0" BorderThickness="0">
+            <Grid Margin="0,8" Height="32">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="txtQtdArquivos" Grid.Column="0" Text="{Binding QuantidadeArquivos}" Style="{StaticResource TextBlockDefault_12}"/>
+                <CheckBox Grid.Column="0" x:Name="chkSelecionarTodos"  Checked="chkSelecionarTodos_Changed" Unchecked="chkSelecionarTodos_Changed" Margin="0" Style="{StaticResource CheckBox14}"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
                     <Button x:Name="btnDeletarTodosArquivos" Click="btnDeletarTodosArquivos_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
@@ -104,8 +62,55 @@
             </Grid>
         </Border>
 
+        <Border Grid.Row="2" Padding="0" Background="{StaticResource Cinza9}" CornerRadius="0" BorderThickness="0">
+            <ListView 
+                      x:Name="lvwPrincipal"
+                      Margin="0"
+                      Padding="0"
+                      ItemsSource="{Binding Arquivos}" 
+                      Style="{StaticResource DefaultListViewStyle}">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- CheckBox para seleção -->
+                            <CheckBox Grid.Column="0" VerticalAlignment="Center" Margin="8,0,8,0" IsChecked="{Binding Selecionado, Mode=TwoWay}" Style="{StaticResource CheckBox14}"/>
+
+                            <!-- Nome do arquivo -->
+                            <TextBlock Grid.Column="1" 
+                                   x:Name="txtArquivo"
+                                   Text="{Binding Nome}"
+                                   Style="{StaticResource TextBlockDefault_14}"
+                                   VerticalAlignment="Center"/>
+
+                            <!-- Botão para abrir pasta -->
+                            <Button Grid.Column="2" 
+                                x:Name="btnAbrirPastaArquivo" 
+                                Click="btnAbrirPastaArquivo_Click" 
+                                Tag="{Binding CaminhoCompleto}" 
+                                Style="{StaticResource FlatButtonNoBackgroundToIcon}" 
+                                Width="32" Height="32">
+                                <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xED25;"/>
+                            </Button>
+                        </Grid>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
+
+        <Border Grid.Row="3" Padding="12,0" Margin="0,0,0,12" Background="{StaticResource Cinza11}" CornerRadius="0,0,8,8" BorderThickness="0" Height="22">
+            <TextBlock x:Name="txtQtdArquivos" Grid.Column="0" Text="{Binding QuantidadeArquivos}" HorizontalAlignment="Center" Foreground="{StaticResource Cinza3}" Style="{StaticResource TextBlockDefault_12}"/>
+        </Border>
+
         <!-- DESTINO -->
-        <Border Grid.Row="3" Padding="12,0" Background="{StaticResource Cinza9}" CornerRadius="8" BorderThickness="0">
+        <Border Grid.Row="4" Padding="12,0" Background="{StaticResource Cinza9}" CornerRadius="8" BorderThickness="0">
             <StackPanel Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                  Margin="0,12,0,0">
 

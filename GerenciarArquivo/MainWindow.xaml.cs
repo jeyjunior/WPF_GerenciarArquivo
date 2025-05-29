@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Diagnostics;
 
 namespace GerenciarArquivo
 {
@@ -55,9 +56,11 @@ namespace GerenciarArquivo
 
                 CarregarArquivosDaBase();
                 CarregarParametrosDaBase();
+                CarregarDestinosDaBase();
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void Window_Closed(object sender, EventArgs e)
@@ -66,12 +69,13 @@ namespace GerenciarArquivo
             {
                 SalvarArquivosNaBase();
                 SalvarParametrosNaBase();
+                SalvarDestinosNaBase();
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void btnSelecionarPastaOrigem_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -110,7 +114,6 @@ namespace GerenciarArquivo
                 MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void btnSelecionarArquivos_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -152,25 +155,46 @@ namespace GerenciarArquivo
                 MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        private void chkSelecionarTodos_Changed(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel?.Arquivos == null) 
-                return;
-
-            bool isChecked = chkSelecionarTodos.IsChecked ?? false;
-
-            ViewModel.SelecionarTodosArquivo(isChecked);
-        }
-
         private void btnAbrirPastaArquivo_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (sender is Button btn && btn.Tag is string caminhoCompleto)
+                {
+                    var file = new FileInfo(caminhoCompleto);
 
+                    if (!file.Exists)
+                    {
+                        MessageBox.Show("O arquivo não existe mais.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        ViewModel.RemoverArquivoPorCaminho(caminhoCompleto);
+                        return;
+                    }
+
+                    if (file.DirectoryName.ObterValorOuPadrao("").Trim() == "")
+                    {
+                        MessageBox.Show("O diretório do arquivo não existe mais.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        ViewModel.RemoverArquivoPorCaminho(caminhoCompleto);
+                        return;
+                    }
+
+                    Process.Start("explorer.exe", file.DirectoryName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-
         private void btnDeletarTodosArquivos_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                ViewModel.RemoverArquivosSelecionado();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void btnCopiarTodosArquivos_Click(object sender, RoutedEventArgs e)
@@ -190,7 +214,37 @@ namespace GerenciarArquivo
 
         private void btnAdicionarCaminhoDestino_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                var dialog = new CommonOpenFileDialog
+                {
+                    IsFolderPicker = true,
+                    Title = "Selecione a pasta de destino",
+                    EnsurePathExists = true,
+                    AllowNonFileSystemItems = false
+                };
 
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    string pastaSelecionada = dialog.FileName;
+
+                    if (pastaSelecionada.ObterValorOuPadrao("").Trim() != "")
+                    {
+                        var dir = new DirectoryInfo(pastaSelecionada);
+
+                        if (dir.Exists)
+                            ViewModel.AdicionarDestino(new Destino { Nome = dir.Name, CaminhoCompleto = dir.FullName });
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show($"Acesso negado: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
 
@@ -202,23 +256,14 @@ namespace GerenciarArquivo
 
             ViewModel.AdicionarArquivo(arquivo);
         }
-        private void AdicionarArquivoNaColecao(FileInfo fileInfo)
+        private void AdicionarDestinoNaColecao(Destino destino)
         {
-            if (fileInfo == null)
+            if (destino == null)
                 return;
 
-            var arquivo = new Arquivo
-            {
-                Nome = fileInfo.Name,
-                CaminhoCompleto = fileInfo.FullName,
-                PK_Arquivo = 0,
-            };
-
-            if (ViewModel.ValidarSeArquivoJaExiste(arquivo))
-                return;
-
-            ViewModel.AdicionarArquivo(arquivo);
+            ViewModel.AdicionarDestino(destino);
         }
+
         private void CarregarArquivosDaBase()
         {
             var arquivos = arquivoAppService.ObterListaArquivos();
@@ -248,13 +293,20 @@ namespace GerenciarArquivo
                 }
             }
         }
+
+        private void CarregarDestinosDaBase()
+        {
+            var destinos = destinoAppService.ObterListaDestinos();
+
+            if (destinos.Count() > 0)
+            {
+                foreach (var destino in destinos)
+                    AdicionarDestinoNaColecao(destino);
+            }
+        }
         private void SalvarArquivosNaBase()
         {
-            var arquivos = ViewModel.Arquivos.ToList();
-
-            if (arquivos.Count() <= 0)
-                return;
-
+            var arquivos = ViewModel.ObterArquivos();
             arquivoAppService.RegistrarArquivos(arquivos);
         }
         private void SalvarParametrosNaBase()
@@ -276,8 +328,12 @@ namespace GerenciarArquivo
                 parametroAppService.SalvarParametros(parametros);
             }
         }
+
+        private void SalvarDestinosNaBase()
+        {
+            var destinos = ViewModel.ObterDestinos();
+            destinoAppService.RegistrarDestinos(destinos);
+        }
         #endregion
-
-
     }
 }

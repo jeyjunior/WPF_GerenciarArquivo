@@ -15,6 +15,8 @@ namespace GerenciarArquivo.Domain.Entidades
         [ChavePrimaria, Obrigatorio]
         public int PK_Destino { get; set; }
         [Obrigatorio]
+        public string Nome { get; set; }
+        [Obrigatorio]
         public string CaminhoCompleto { get; set; }
 
         [Editavel(false)]

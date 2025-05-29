@@ -25,9 +25,6 @@ namespace GerenciarArquivo.Application.Services
             if (arquivos == null)
                 return false;
 
-            if (arquivos.Count() <= 0)
-                return false;
-
             try
             {
                 _unitOfWork.Begin();

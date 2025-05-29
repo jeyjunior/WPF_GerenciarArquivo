@@ -1,4 +1,5 @@
 ﻿using GerenciarArquivo.Domain.Entidades;
+using JJ.NET.Core.Extensoes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,61 +20,71 @@ namespace GerenciarArquivo.ViewModel.ViewModel
         }
 
         #region Arquivos
-        private ObservableCollection<Arquivo> _arquivos = new ObservableCollection<Arquivo>();
-        public ObservableCollection<Arquivo> Arquivos
+        public ObservableCollection<ArquivoViewModel> Arquivos { get; } = new();
+
+        private bool _selecionarTodos;
+        public bool SelecionarTodos
         {
-            get => _arquivos;
+            get => _selecionarTodos;
             set
             {
-                _arquivos = value;
-                OnPropertyChanged(nameof(Arquivos));
+                _selecionarTodos = value;
+                foreach (var arquivoVM in Arquivos)
+                {
+                    arquivoVM.Selecionado = value;
+                }
+                OnPropertyChanged(nameof(SelecionarTodos));
             }
         }
-        public void RemoverTodosArquivos()
+
+        public void RemoverArquivosSelecionado()
         {
-            _arquivos.Clear();
+            var arquivosParaRemover = Arquivos.Where(a => a.Arquivo.Selecionado).ToList();
+            foreach (var item in arquivosParaRemover)
+                Arquivos.Remove(item);
+
             OnPropertyChanged(nameof(QuantidadeArquivos));
         }
         public void AdicionarArquivo(Arquivo arquivo)
         {
             if (!ValidarSeArquivoJaExiste(arquivo))
             {
-                _arquivos.Add(arquivo);
+                Arquivos.Add(new ArquivoViewModel(arquivo));
                 OnPropertyChanged(nameof(QuantidadeArquivos));
             }
         }
         public bool ValidarSeArquivoJaExiste(Arquivo arquivo)
         {
-            return _arquivos.Any(a => a.Nome.Equals(arquivo.Nome, StringComparison.OrdinalIgnoreCase) && a.CaminhoCompleto.Equals(arquivo.CaminhoCompleto, StringComparison.OrdinalIgnoreCase));
+            return Arquivos.Any(a => a.Nome.Equals(arquivo.Nome, StringComparison.OrdinalIgnoreCase) && a.CaminhoCompleto.Equals(arquivo.CaminhoCompleto, StringComparison.OrdinalIgnoreCase));
         }
         public bool RemoverArquivoPorCaminho(string caminhoCompleto)
         {
-            var arquivo = _arquivos.FirstOrDefault(i => i.CaminhoCompleto.Equals(caminhoCompleto));
+            var arquivo = Arquivos.FirstOrDefault(i => i.CaminhoCompleto.Equals(caminhoCompleto));
             if (arquivo == null)
                 return true;
 
-            bool removido = _arquivos.Remove(arquivo);
+            bool removido = Arquivos.Remove(arquivo);
             if (removido)
                 OnPropertyChanged(nameof(QuantidadeArquivos));
 
             return removido;
         }
+        public ArquivoViewModel ObterArquivoViewModel(string caminhoCompleto)
+        {
+            return Arquivos.FirstOrDefault(i => i.CaminhoCompleto.Equals(caminhoCompleto));
+        }
         public Arquivo ObterArquivo(string caminhoCompleto)
         {
-            return _arquivos.FirstOrDefault(i => i.CaminhoCompleto.Equals(caminhoCompleto));
+            var arquivoViewModel = Arquivos.FirstOrDefault(i => i.CaminhoCompleto.Equals(caminhoCompleto));
+
+            if (arquivoViewModel == null)
+                return new Arquivo();
+
+            return arquivoViewModel.Arquivo;
         }
-
-        public void SelecionarTodosArquivo(bool selecionar)
+        public List<Arquivo> ObterArquivos()
         {
-            if (Arquivos == null)
-                return;
-
-            foreach (var arquivo in Arquivos)
-            {
-                arquivo.Selecionado = selecionar;
-            }
-
-            OnPropertyChanged(nameof(Arquivos));
+            return Arquivos.Select(i => i.Arquivo).ToList();
         }
         #endregion
 
@@ -112,7 +123,42 @@ namespace GerenciarArquivo.ViewModel.ViewModel
         #region Status
         public string QuantidadeArquivos
         {
-            get => "Total : " + _arquivos.Count();
+            get => "Total : " + Arquivos.Count();
+        }
+        #endregion
+
+        #region Destinos
+        public ObservableCollection<DestinoViewModel> Destinos { get; } = new();
+
+        public void AdicionarDestino(Destino destino)
+        {
+            if (!ValidarSeDestinoJaExiste(destino))
+            {
+                Destinos.Add(new DestinoViewModel(destino));
+            }
+        }
+        public bool ValidarSeDestinoJaExiste(Destino destino)
+        {
+            return Destinos.Any(a => a.Nome.Equals(destino.Nome, StringComparison.OrdinalIgnoreCase) && a.CaminhoCompleto.Equals(destino.CaminhoCompleto, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public List<Destino> ObterDestinos()
+        {
+            return Destinos.Select(i => i.Destino).ToList();
+        }
+
+        private DestinoViewModel _destinoSelecionado;
+        public DestinoViewModel DestinoSelecionado
+        {
+            get => _destinoSelecionado;
+            set
+            {
+                if (_destinoSelecionado != value)
+                {
+                    _destinoSelecionado = value;
+                    OnPropertyChanged(nameof(DestinoSelecionado));
+                }
+            }
         }
         #endregion
     }

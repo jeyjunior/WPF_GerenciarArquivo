@@ -12,11 +12,11 @@
   <ItemGroup>
     <Content Include="icone.ico" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
-  </ItemGroup>
-
+	
+	<ItemGroup>
+		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+	</ItemGroup>
+	
 
   <ItemGroup>
     <ProjectReference Include="..\GerenciarArquivo.Application\GerenciarArquivo.Application.csproj" />

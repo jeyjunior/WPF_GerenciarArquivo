@@ -82,13 +82,6 @@ namespace GerenciarArquivo.ViewModel.ViewModel
 
             return arquivoViewModel.Arquivo;
         }
-        public List<Arquivo> ObterArquivos()
-        {
-            return Arquivos.Select(i => i.Arquivo).ToList();
-        }
-        #endregion
-
-        #region Destinos
         #endregion
 
         #region Parametros
@@ -129,24 +122,35 @@ namespace GerenciarArquivo.ViewModel.ViewModel
 
         #region Destinos
         public ObservableCollection<DestinoViewModel> Destinos { get; } = new();
+        public bool RemoverDestinoSelecionado()
+        {
+            var destino = Destinos.FirstOrDefault(i => i.CaminhoCompleto.Equals(DestinoSelecionado.CaminhoCompleto));
+            if (destino == null)
+                return true;
 
+            bool removido = Destinos.Remove(destino);
+
+            DestinoSelecionado = (Destinos.Count > 0) ? Destinos.FirstOrDefault() : null;
+
+            return removido;
+        }
         public void AdicionarDestino(Destino destino)
         {
             if (!ValidarSeDestinoJaExiste(destino))
             {
-                Destinos.Add(new DestinoViewModel(destino));
+                var destinoViewModel = new DestinoViewModel(destino);
+                Destinos.Add(destinoViewModel);
+                this.DestinoSelecionado = destinoViewModel;
             }
         }
         public bool ValidarSeDestinoJaExiste(Destino destino)
         {
             return Destinos.Any(a => a.Nome.Equals(destino.Nome, StringComparison.OrdinalIgnoreCase) && a.CaminhoCompleto.Equals(destino.CaminhoCompleto, StringComparison.OrdinalIgnoreCase));
         }
-
         public List<Destino> ObterDestinos()
         {
-            return Destinos.Select(i => i.Destino).ToList();
+            return Destinos.Select(i => i.Destino).ToList(); 
         }
-
         private DestinoViewModel _destinoSelecionado;
         public DestinoViewModel DestinoSelecionado
         {

@@ -25,12 +25,18 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                                 <Grid>
-                                    <ContentPresenter x:Name="contentPresenter"
+                                    <TextBlock Text="{Binding SelectedItem.Nome, RelativeSource={RelativeSource TemplatedParent}}"
+                                               Margin="{TemplateBinding Padding}"
+                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               Foreground="{TemplateBinding Foreground}" />
+
+                                    <!--<ContentPresenter x:Name="contentPresenter"
                                       Content="{TemplateBinding SelectionBoxItem}"
                                       ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                       Margin="{TemplateBinding Padding}"
                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
 
                                     <ToggleButton x:Name="toggleButton"
                                                   Grid.Column="1"

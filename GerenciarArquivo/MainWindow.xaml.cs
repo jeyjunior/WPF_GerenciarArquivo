@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -18,7 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Diagnostics;
+using System.Runtime.Intrinsics.X86;
 
 namespace GerenciarArquivo
 {
@@ -196,22 +197,125 @@ namespace GerenciarArquivo
                 MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void btnCopiarTodosArquivos_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (ViewModel.Destinos.Count <= 0 || ViewModel.DestinoSelecionado == null)
+                {
+                    MessageBox.Show("Selecione uma pasta de destino.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cboCaminhoDestino.Focus();
+                    return;
+                }
+                else if (!ViewModel.DestinoSelecionado.Destino.Validar())
+                {
+                    MessageBox.Show("Selecione uma pasta de destino.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cboCaminhoDestino.Focus();
+                    return;
+                }
 
+                var dir = new DirectoryInfo(ViewModel.DestinoSelecionado.CaminhoCompleto);
+
+                if (dir == null || !dir.Exists)
+                {
+                    MessageBox.Show("Pasta de destino não existe.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cboCaminhoDestino.Focus();
+                    return;
+                }
+
+                if (!TemPermissaoEscrita(dir.FullName))
+                {
+                    MessageBox.Show("Você não tem permissão para gravar nessa pasta. Execute o aplicativo como administrador ou selecione outro local.", "Permissão negada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var arquivosParaCopiar = ViewModel.Arquivos.Where(i => i.Selecionado).ToList();
+
+                if (arquivosParaCopiar.Count <= 0)
+                {
+                    MessageBox.Show("Você precisa marcar os arquivos para copiar.", "Copiar", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                int totalCopiado = 0;
+                string nomePadrao = ViewModel.NomePadrao.ObterValorOuPadrao("").Trim();
+
+                for (int i = 0; i < arquivosParaCopiar.Count; i++)
+                {
+                    var item = arquivosParaCopiar[i];
+                    try
+                    {
+                        var caminhoOrigem = item.CaminhoCompleto;
+                        var extensao = System.IO.Path.GetExtension(caminhoOrigem);
+                        string nomeFinal;
+
+                        if (ViewModel.NomePadraoAtivo)
+                        {
+                            // Se tiver mais de 1 arquivo, adiciona sufixo (_1, _2, etc.)
+                            nomeFinal = arquivosParaCopiar.Count > 1
+                                ? $"{nomePadrao}_{i + 1}{extensao}"
+                                : $"{nomePadrao}{extensao}";
+                        }
+                        else
+                        {
+                            nomeFinal = System.IO.Path.GetFileName(caminhoOrigem);
+                        }
+
+                        var destinoCompleto = System.IO.Path.Combine(dir.FullName, nomeFinal);
+
+                        File.Copy(caminhoOrigem, destinoCompleto, overwrite: true);
+                        totalCopiado++;
+                    }
+                    catch (Exception exArquivo)
+                    {
+                        MessageBox.Show($"Erro ao copiar o arquivo '{item.CaminhoCompleto}': {exArquivo.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+
+                MessageBox.Show($"{totalCopiado} arquivo(s) copiado(s) com sucesso!", "Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void btnDeletarCaminhoDestino_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (ViewModel.DestinoSelecionado == null)
+                    return;
 
+                ViewModel.RemoverDestinoSelecionado();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-
         private void btnAbrirPastaCaminhoDestino_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (ViewModel.DestinoSelecionado == null)
+                    return;
 
+                var dir = new DirectoryInfo(ViewModel.DestinoSelecionado.CaminhoCompleto);
+                if (!dir.Exists)
+                {
+                    MessageBox.Show("O diretório de destino não existe mais.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ViewModel.RemoverDestinoSelecionado();
+                    return;
+                }
+
+                Process.Start("explorer.exe", dir.FullName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-
         private void btnAdicionarCaminhoDestino_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -249,21 +353,6 @@ namespace GerenciarArquivo
         #endregion
 
         #region Metodos
-        private void AdicionarArquivoNaColecao(Arquivo arquivo)
-        {
-            if (arquivo == null)
-                return;
-
-            ViewModel.AdicionarArquivo(arquivo);
-        }
-        private void AdicionarDestinoNaColecao(Destino destino)
-        {
-            if (destino == null)
-                return;
-
-            ViewModel.AdicionarDestino(destino);
-        }
-
         private void CarregarArquivosDaBase()
         {
             var arquivos = arquivoAppService.ObterListaArquivos();
@@ -271,7 +360,7 @@ namespace GerenciarArquivo
             if (arquivos.Count() > 0)
             {
                 foreach (var arquivo in arquivos)
-                    AdicionarArquivoNaColecao(arquivo);
+                    ViewModel.AdicionarArquivo(arquivo);
             }
         }
         private void CarregarParametrosDaBase()
@@ -293,7 +382,6 @@ namespace GerenciarArquivo
                 }
             }
         }
-
         private void CarregarDestinosDaBase()
         {
             var destinos = destinoAppService.ObterListaDestinos();
@@ -301,12 +389,12 @@ namespace GerenciarArquivo
             if (destinos.Count() > 0)
             {
                 foreach (var destino in destinos)
-                    AdicionarDestinoNaColecao(destino);
+                    ViewModel.AdicionarDestino(destino);
             }
         }
         private void SalvarArquivosNaBase()
         {
-            var arquivos = ViewModel.ObterArquivos();
+            var arquivos = ViewModel.Arquivos.Select(i => i.Arquivo).ToList();
             arquivoAppService.RegistrarArquivos(arquivos);
         }
         private void SalvarParametrosNaBase()
@@ -328,12 +416,25 @@ namespace GerenciarArquivo
                 parametroAppService.SalvarParametros(parametros);
             }
         }
-
         private void SalvarDestinosNaBase()
         {
             var destinos = ViewModel.ObterDestinos();
             destinoAppService.RegistrarDestinos(destinos);
         }
+        bool TemPermissaoEscrita(string caminho)
+        {
+            try
+            {
+                string teste = System.IO.Path.Combine(caminho, System.IO.Path.GetRandomFileName());
+                using (File.Create(teste, 1, FileOptions.DeleteOnClose)) { }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         #endregion
     }
 }

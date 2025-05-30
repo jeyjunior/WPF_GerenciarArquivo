@@ -21,7 +21,6 @@ namespace GerenciarArquivo.ViewModel.ViewModel
         public string CaminhoCompleto => _destino.CaminhoCompleto;
         public string Nome => _destino.Nome;
 
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

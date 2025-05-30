@@ -26,9 +26,6 @@ namespace GerenciarArquivo.Application.Services
             if (destinos == null)
                 return false;
 
-            if (destinos.Count() <= 0)
-                return false;
-
             try
             {
                 _unitOfWork.Begin();

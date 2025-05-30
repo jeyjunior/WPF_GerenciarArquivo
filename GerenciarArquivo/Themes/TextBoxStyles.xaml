@@ -46,7 +46,7 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="border" Property="Background" Value="{StaticResource Cinza10Transp50}"/>
                             <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Cinza10Transp50}"/>
-                            <Setter Property="Foreground" Value="{StaticResource Preto}"/>
+                            <Setter Property="Foreground" Value="{StaticResource Cinza5}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

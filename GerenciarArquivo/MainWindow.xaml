@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GerenciarArquivo"
-        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        Title="Gerenciar Arquivos"
         Background="{DynamicResource Cinza10}"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        Title="MainWindow" Height="600" Width="550" MinWidth="550" MinHeight="600">
+        Height="600" Width="550" MinWidth="550" MinHeight="600">
 
     <Grid x:Name="RootGrid" Margin="18" >
         <Grid.RowDefinitions>
@@ -52,10 +52,10 @@
                 <CheckBox Grid.Column="0" x:Name="chkSelecionarTodos" IsChecked="{Binding SelecionarTodos, Mode=TwoWay}" Margin="0" Style="{StaticResource CheckBox14}"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
-                    <Button x:Name="btnDeletarTodosArquivos" Click="btnDeletarTodosArquivos_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
+                    <Button x:Name="btnDeletarTodosArquivos" Click="btnDeletarTodosArquivos_Click" IsEnabled="{Binding HabilitarBotaoArquivo}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
                         <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE74D;"/>
                     </Button>
-                    <Button x:Name="btnCopiarTodosArquivos" Click="btnCopiarTodosArquivos_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
+                    <Button x:Name="btnCopiarTodosArquivos" Click="btnCopiarTodosArquivos_Click" IsEnabled="{Binding HabilitarBotaoArquivo}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
                         <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE8C8;"/>
                     </Button>
                 </StackPanel>
@@ -142,10 +142,10 @@
                                   Margin="0,0,8,8"/>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
-                            <Button x:Name="btnDeletarCaminhoDestino" Click="btnDeletarCaminhoDestino_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34" >
+                            <Button x:Name="btnDeletarCaminhoDestino" Click="btnDeletarCaminhoDestino_Click" IsEnabled="{Binding HabilitarBotaoDestino}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34" >
                                 <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE75C;" />
                             </Button>
-                            <Button x:Name="btnAbrirPastaCaminhoDestino" Click="btnAbrirPastaCaminhoDestino_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34">
+                            <Button x:Name="btnAbrirPastaCaminhoDestino" Click="btnAbrirPastaCaminhoDestino_Click" IsEnabled="{Binding HabilitarBotaoDestino}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34">
                                 <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xED25;"/>
                             </Button>
                             <Button x:Name="btnAdicionarCaminhoDestino" Click="btnAdicionarCaminhoDestino_Click" Style="{StaticResource FlatButtonNoBackgroundToIcon}" VerticalAlignment="Top" Height="34" Width="34">

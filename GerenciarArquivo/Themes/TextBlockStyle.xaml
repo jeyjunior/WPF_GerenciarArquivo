@@ -28,6 +28,11 @@
 
     <Style x:Key="TextBlockToIcon" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Button}}" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource Cinza6}"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="TextBlockToIcon_OutlinedButton" TargetType="TextBlock" BasedOn="{StaticResource TextBlockToIcon}">

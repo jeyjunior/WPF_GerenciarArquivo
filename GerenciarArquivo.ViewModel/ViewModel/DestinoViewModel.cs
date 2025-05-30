@@ -19,7 +19,7 @@ namespace GerenciarArquivo.ViewModel.ViewModel
         }
 
         public string CaminhoCompleto => _destino.CaminhoCompleto;
-        public string Nome => _destino.Nome;
+        public string Nome => "...\\" + _destino.Nome;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>

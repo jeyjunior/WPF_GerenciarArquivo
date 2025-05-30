@@ -17,28 +17,38 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Caixa de seleção customizada (sem Path interno) -->
-                        <Border x:Name="checkBoxBorder"
-                                Grid.Column="0"
-                                Width="18"
-                                Height="18"
-                                Margin="0,0,8,0"
+                        <!-- Container da caixa de seleção -->
+                        <Grid Grid.Column="0" Width="18" Height="18" Margin="0,0,8,0">
+                            <!-- Caixa de seleção (fundo) -->
+                            <Border x:Name="checkBoxBorder"
                                 Background="{StaticResource Branco}"
                                 BorderBrush="{StaticResource AzulFluent_2}"
                                 BorderThickness="1"
                                 CornerRadius="3"/>
 
-                        <!-- ContentPresenter para o texto -->
+                            <!-- Ícone de check (sempre presente, mas invisível quando não marcado) -->
+                            <TextBlock x:Name="checkIcon"
+                                   Text="✓"  
+                                   FontFamily="Arial" 
+                                   FontSize="14"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="Collapsed"/>
+                    </Grid>
+
+                        <!-- Texto do CheckBox -->
                         <ContentPresenter x:Name="contentPresenter"
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        RecognizesAccessKey="True"/>
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    RecognizesAccessKey="True"/>
                     </Grid>
 
                     <ControlTemplate.Triggers>
-                        <!-- Quando marcado - apenas muda o fundo para azul -->
+                        <!-- Quando marcado: fundo azul e ícone visível -->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="checkBoxBorder" Property="Background" Value="{StaticResource AzulFluent_2}"/>
+                            <Setter TargetName="checkIcon" Property="Visibility" Value="Visible"/>
                         </Trigger>
 
                         <!-- Efeito hover -->
@@ -49,6 +59,7 @@
                         <!-- Quando desabilitado -->
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="checkBoxBorder" Property="Opacity" Value="0.6"/>
+                            <Setter TargetName="checkIcon" Property="Opacity" Value="0.6"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

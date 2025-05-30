@@ -279,7 +279,6 @@ namespace GerenciarArquivo
                 MessageBox.Show(ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void btnDeletarCaminhoDestino_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -434,7 +433,6 @@ namespace GerenciarArquivo
                 return false;
             }
         }
-
         #endregion
     }
 }

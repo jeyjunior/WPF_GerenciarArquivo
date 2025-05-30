@@ -30,7 +30,7 @@
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Button}}" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource Cinza6}"/>
+                <Setter Property="Foreground" Value="{StaticResource Cinza1}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

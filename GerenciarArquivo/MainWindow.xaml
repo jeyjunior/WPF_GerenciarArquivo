@@ -19,6 +19,7 @@
             <RowDefinition  Height="*"/>
             <RowDefinition  Height="Auto"/>
             <RowDefinition  Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- ORIGEM -->
@@ -33,13 +34,13 @@
                     Grid.Column="0" 
                     Click="btnSelecionarPastaOrigem_Click"
                     Content="Selecionar Pasta" 
-                    Style="{StaticResource FlatButton}"/>
+                    Style="{StaticResource FlatButtonDefault}"/>
             
             <Button x:Name="btnSelecionarArquivos" 
                     Grid.Column="2" 
                     Click="btnSelecionarArquivos_Click"
                     Content="Selecionar Arquivos" 
-                    Style="{StaticResource FlatButton}"/>
+                    Style="{StaticResource FlatButtonDefault}"/>
         </Grid>
 
         <Border Grid.Row="1" Padding="12,0" Margin="0,0,0,0" Height="48" Background="{StaticResource Cinza11}" CornerRadius="8,8,0,0" BorderThickness="0">
@@ -51,14 +52,7 @@
 
                 <CheckBox Grid.Column="0" x:Name="chkSelecionarTodos" IsChecked="{Binding SelecionarTodos, Mode=TwoWay}" Margin="0" Style="{StaticResource CheckBox14}"/>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
-                    <Button x:Name="btnDeletarTodosArquivos" Click="btnDeletarTodosArquivos_Click" IsEnabled="{Binding HabilitarBotaoArquivo}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                        <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE74D;"/>
-                    </Button>
-                    <Button x:Name="btnCopiarTodosArquivos" Click="btnCopiarTodosArquivos_Click" IsEnabled="{Binding HabilitarBotaoArquivo}" Style="{StaticResource FlatButtonNoBackgroundToIcon}" Width="32" Height="32">
-                        <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE8C8;"/>
-                    </Button>
-                </StackPanel>
+
             </Grid>
         </Border>
 
@@ -114,7 +108,7 @@
         </Border>
 
         <!-- DESTINO -->
-        <Border Grid.Row="4" Padding="12,0" Background="{StaticResource Cinza9}" CornerRadius="8" BorderThickness="0">
+        <Border Grid.Row="4" Padding="12,0" Margin="0,0,0,12" Background="{StaticResource Cinza9}" CornerRadius="8" BorderThickness="0">
             <StackPanel Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                  Margin="0,12,0,0">
 
@@ -137,7 +131,7 @@
                                   VerticalAlignment="Center"
                                   MaxDropDownHeight="200"
                                   Height="34"
-                                  DisplayMemberPath="Nome"
+                                  DisplayMemberPath="NomeFormatado"
                                   SelectedItem="{Binding DestinoSelecionado, Mode=TwoWay}"
                                   Margin="0,0,8,8"/>
 
@@ -158,6 +152,42 @@
                 
                 </StackPanel>
             </StackPanel>
+        </Border>
+
+        <Border Grid.Row="5" Padding="0" Background="{StaticResource Nenhuma}" CornerRadius="8" BorderThickness="0">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btnDeletarTodosArquivos" 
+                        Click="btnDeletarTodosArquivos_Click"
+                        Grid.Column="0"
+                        Width="48"
+                        IsEnabled="{Binding HabilitarBotaoArquivo}"
+                        Background="{StaticResource VermelhoFluent_2}"
+                        Style="{StaticResource FlatButtonToIcon}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE74D;"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="btnCopiarTodosArquivos" 
+                        Click="btnCopiarTodosArquivos_Click" 
+                        Grid.Column="2"
+                        IsEnabled="{Binding HabilitarBotaoArquivo}" 
+                        Style="{StaticResource FlatButtonToIcon}"
+                        Height="48"
+                        HorizontalAlignment="Stretch">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TextBlockToIcon}" Text="&#xE8C8;" Margin="0,0,10,0"/>
+                        <TextBlock Style="{StaticResource TextBlockDefault}" Text="Copiar para destino."/>
+                    </StackPanel>
+                </Button>
+
+            </Grid>
         </Border>
     </Grid>
 </Window>
